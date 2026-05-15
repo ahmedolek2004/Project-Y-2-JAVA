@@ -14,7 +14,7 @@ public class StudentManagementGUI extends JFrame {
     public StudentManagementGUI() {
         system = new StudentManagementSystem();
         setupWindow();
-        // addSampleData(); // يمكنك إلغاء التعليق لإضافة بيانات تجريبية
+        // addSampleData(); //  
     }
     
     private void setupWindow() {
