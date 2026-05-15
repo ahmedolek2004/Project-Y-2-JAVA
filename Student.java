@@ -10,7 +10,7 @@ public class Student {
     private String name;
     private String major;
     private ArrayList<Subject> subjects;
-
+ 
     // Constructor
     public Student(int studentId, String name, String major) {
         this.studentId = studentId;
@@ -50,11 +50,17 @@ public class Student {
         subjects.add(subject);
     }
 
-    // Remove a subject by index
-    public void removeSubject(int index) {
-        if (index >= 0 && index < subjects.size()) {
-            subjects.remove(index);
+    // Remove a subject by NAME
+    public boolean removeSubject(String subjectName) {
+        if (subjectName == null || subjects == null || subjectName.trim().isEmpty()) {
+            return false;
         }
+
+        String nameToRemove = subjectName.trim();
+
+        return subjects.removeIf(subject -> 
+            subject.getSubjectName().equalsIgnoreCase(nameToRemove)
+        );
     }
 
     // Calculate GPA using the formula: Σ(grade × creditHours) / Σ(creditHours)
@@ -76,6 +82,25 @@ public class Student {
         }
 
         return totalGradePoints / totalCreditHours;
+    }
+      
+    // Display all subject information as String
+    public String displayAllSubjects() {
+        if (subjects.isEmpty()) {
+            return "No subjects registered for this student.\n";
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("Student: ").append(name).append(" (ID: ").append(studentId).append(")\n");
+        sb.append("====================================\n");
+        
+        for (int i = 0; i < subjects.size(); i++) {
+            Subject s = subjects.get(i);
+            sb.append(String.format("%d. %s\n", i+1, s.toString()));
+        }
+        
+        sb.append("====================================\n");
+        return sb.toString();
     }
 
     // Display student information as String

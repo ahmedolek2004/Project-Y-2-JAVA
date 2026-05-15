@@ -6,12 +6,12 @@ public class Main {
     
     public static void main(String[] args) {
         // Add sample data
-        system.addStudent(101, "Ahmed Ali", "Computer Science");
-        system.addStudent(102, "Sara Mohamed", "Software Engineering");
-        system.addStudent(103, "Omar Khaled", "Information Technology");
+        // system.addStudent(101, "Ahmed Ali", "Computer Science");
+        // system.addStudent(102, "Sara Mohamed", "Software Engineering");
+        // system.addStudent(103, "Omar Khaled", "Information Technology");
         
-        system.addSubjectToStudent(101, "Java Programming", 3, 92);
-        system.addSubjectToStudent(101, "Database Systems", 3, 85);
+        // system.addSubjectToStudent(101, "Java Programming", 3, 92);
+        // system.addSubjectToStudent(101, "Database Systems", 3, 85);
         
         int choice;
         do {
@@ -109,7 +109,7 @@ public class Main {
         }
     }
     
-    private static void removeSubject() {
+        private static void removeSubject() {
         int id = getIntInput("Enter Student ID: ");
         Student student = system.findStudentById(id);
         if (student == null) {
@@ -117,16 +117,25 @@ public class Main {
             return;
         }
         
-        System.out.println("Subjects:");
+        // عرض المواد أولاً
+        System.out.println("\nSubjects for student " + student.getName() + ":");
+        if (student.getSubjects().isEmpty()) {
+            System.out.println("No subjects found!");
+            return;
+        }
+        
         for (int i = 0; i < student.getSubjects().size(); i++) {
             System.out.println((i + 1) + ". " + student.getSubjects().get(i));
         }
         
-        int index = getIntInput("Enter subject number to remove: ");
-        if (system.removeSubjectFromStudent(id, index - 1)) {
-            System.out.println("✅ Subject removed successfully!");
+        scanner.nextLine(); // تنظيف الـ buffer
+        System.out.print("Enter Subject Name to remove: ");
+        String subjectName = scanner.nextLine().trim();
+        
+        if (system.removeSubjectFromStudent(id, subjectName)) {
+            System.out.println("✅ Subject '" + subjectName + "' removed successfully!");
         } else {
-            System.out.println("❌ Invalid subject number!");
+            System.out.println("❌ Failed to remove subject! Make sure the name is correct.");
         }
     }
     

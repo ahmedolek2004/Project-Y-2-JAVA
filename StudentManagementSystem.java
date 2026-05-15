@@ -71,18 +71,13 @@ public class StudentManagementSystem {
     }
     
     // Remove a subject from a student
-    public boolean removeSubjectFromStudent(int studentId, int subjectIndex) {
+    public boolean removeSubjectFromStudent(int studentId, String subjectName) {
         Student student = findStudentById(studentId);
         if (student == null) {
             return false;
         }
         
-        ArrayList<Subject> subjects = student.getSubjects();
-        if (subjectIndex >= 0 && subjectIndex < subjects.size()) {
-            student.removeSubject(subjectIndex);
-            return true;
-        }
-        return false;
+        return student.removeSubject(subjectName);
     }
     
     // Get student GPA
@@ -91,7 +86,7 @@ public class StudentManagementSystem {
         if (student != null) {
             return student.calculateGPA();
         }
-        return -1;
+        return -1;// Return -1 to indicate student not found
     }
     
     // Get student with highest GPA
@@ -133,6 +128,15 @@ public class StudentManagementSystem {
         }
         sb.append("═══════════════════════════════════════\n");
         return sb.toString();
+    }
+
+    // Display subjects for a specific student
+    public String displayStudentSubjects(int studentId) {
+        Student student = findStudentById(studentId);
+        if (student != null) {
+            return student.displayAllSubjects();
+        }
+        return "Student with ID " + studentId + " not found!\n";
     }
     
     // Get number of students
