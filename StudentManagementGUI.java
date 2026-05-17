@@ -14,46 +14,7 @@ public class StudentManagementGUI extends JFrame {
     public StudentManagementGUI() {
         system = new StudentManagementSystem();
         setupWindow();
-        // addSampleData(); //  
-    }
-    
-    private void setupWindow() {
-        setTitle("Student Management System");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(950, 750);
-        setLocationRelativeTo(null);
-        
-        // Main panel with BorderLayout
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        
-        // Title
-        JLabel titleLabel = new JLabel("Student Management System", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(33, 33, 99));
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
-        
-        // Center panel with display area
-        displayArea = new JTextArea();
-        displayArea.setEditable(false);
-        displayArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        JScrollPane scrollPane = new JScrollPane(displayArea);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Output Area"));
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        
-        // South panel with tabs
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Student Operations", createStudentPanel());
-        tabbedPane.addTab("Subject Operations", createSubjectPanel());
-        tabbedPane.addTab("Display Options", createDisplayPanel());
-        
-        mainPanel.add(tabbedPane, BorderLayout.SOUTH);
-        
-        add(mainPanel);
-        
-        // Welcome message
-        displayArea.append("Welcome to Student Management System!\n\n");
-        displayArea.append(system.displayAllStudents());
+        // addSampleData(); // إذا كنت تريد بيانات تجريبية
     }
     
     private JPanel createStudentPanel() {
@@ -163,7 +124,7 @@ public class StudentManagementGUI extends JFrame {
         gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
         panel.add(addSubjectBtn, gbc);
         
-        // ==================== Remove Subject Section ====================
+        // Remove Subject Section
         gbc.gridy = 6;
         gbc.gridwidth = 2;
         panel.add(new JSeparator(), gbc);
@@ -198,7 +159,7 @@ public class StudentManagementGUI extends JFrame {
         return panel;
     }
     
-        private JPanel createDisplayPanel() {
+    private JPanel createDisplayPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
@@ -207,7 +168,7 @@ public class StudentManagementGUI extends JFrame {
         displayStudentBtn.setForeground(Color.WHITE);
         displayStudentBtn.addActionListener(e -> displayStudent());
         
-        JButton displaySubjectsBtn = new JButton("Display Student Subjects");   // ← الزر الجديد
+        JButton displaySubjectsBtn = new JButton("Display Student Subjects");
         displaySubjectsBtn.setBackground(new Color(26, 188, 156));
         displaySubjectsBtn.setForeground(Color.WHITE);
         displaySubjectsBtn.addActionListener(e -> displayStudentSubjects());
@@ -233,13 +194,52 @@ public class StudentManagementGUI extends JFrame {
         convertGradeBtn.addActionListener(e -> convertGrade());
         
         panel.add(displayStudentBtn);
-        panel.add(displaySubjectsBtn);        // ← added
+        panel.add(displaySubjectsBtn);
         panel.add(calcGpaBtn);
         panel.add(displayAllBtn);
         panel.add(highestGpaBtn);
         panel.add(convertGradeBtn);
         
         return panel;
+    }
+    
+    private void setupWindow() {
+        setTitle("Student Management System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 780);
+        setLocationRelativeTo(null);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+        // Title
+        JLabel titleLabel = new JLabel("Student Management System", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(new Color(33, 33, 99));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        
+        // Tabs في الأعلى
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Student Operations", createStudentPanel());
+        tabbedPane.addTab("Subject Operations", createSubjectPanel());
+        tabbedPane.addTab("Display Options", createDisplayPanel());
+        
+        mainPanel.add(tabbedPane, BorderLayout.NORTH);
+        
+        // Output Area في الوسط (أكبر مساحة)
+        displayArea = new JTextArea();
+        displayArea.setEditable(false);
+        displayArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Output Area"));
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        
+        add(mainPanel);
+        
+        // Welcome Message
+        displayArea.append("Welcome to Student Management System!\n");
+        displayArea.append("====================================\n");
+        displayArea.append(system.displayAllStudents());
     }
     
     // ====================== Action Methods ======================
@@ -289,34 +289,32 @@ public class StudentManagementGUI extends JFrame {
         }
     }
     
-private void removeSubjectFromStudent(JTextField idField, JTextField nameField) {
-    try {
-        int studentId = Integer.parseInt(idField.getText().trim());
-        String subjectName = nameField.getText().trim();
+    private void removeSubjectFromStudent(JTextField idField, JTextField nameField) {
+        try {
+            int studentId = Integer.parseInt(idField.getText().trim());
+            String subjectName = nameField.getText().trim();
 
-        if (subjectName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Subject name cannot be empty!", 
-                                        "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+            if (subjectName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Subject name cannot be empty!", 
+                                            "Input Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        if (system.removeSubjectFromStudent(studentId, subjectName)) {
-            displayArea.append("✅ Subject '" + subjectName + "' removed successfully from student ID " 
-                             + studentId + "\n");
-            idField.setText("");
-            nameField.setText("");
-        } else {
-            JOptionPane.showMessageDialog(this, 
-                "Failed to remove subject!\n" +
-                "• Make sure the student exists\n" +
-                "• Make sure the subject name is correct", 
-                "Not Found", JOptionPane.ERROR_MESSAGE);
+            if (system.removeSubjectFromStudent(studentId, subjectName)) {
+                displayArea.append("✅ Subject '" + subjectName + "' removed successfully from student ID " 
+                                 + studentId + "\n");
+                idField.setText("");
+                nameField.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Failed to remove subject!\nMake sure the student exists and subject name is correct.", 
+                    "Not Found", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid numeric Student ID!", 
+                                        "Input Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Please enter a valid numeric Student ID!", 
-                                    "Input Error", JOptionPane.ERROR_MESSAGE);
     }
-}
     
     private void removeStudent(JTextField removeIdField) {
         try {
@@ -350,7 +348,8 @@ private void removeSubjectFromStudent(JTextField idField, JTextField nameField) 
             }
         }
     }
-        private void displayStudentSubjects() {
+    
+    private void displayStudentSubjects() {
         String idStr = JOptionPane.showInputDialog(this, "Enter Student ID to display his subjects:");
         if (idStr == null || idStr.trim().isEmpty()) return;
         
